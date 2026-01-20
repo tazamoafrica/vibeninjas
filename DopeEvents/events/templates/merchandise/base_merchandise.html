@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TazamoEXP Merchandise{% endblock %}
+
+{% block extra_head %}
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+<style>
+body {
+    background-image: url('{% static "images/background.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Minimalist styles for merchandise section */
+.merchandise-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.merchandise-card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.merchandise-img-container {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafbfc;
+    border-radius: 8px 8px 0 0;
+}
+
+.merchandise-img {
+    max-height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.merchandise-card .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1.5rem;
+}
+
+.merchandise-card .card-footer {
+    background: rgba(250, 251, 252, 0.9);
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+}
+
+.price-tag {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.stock-status {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.in-stock {
+    color: #059669;
+}
+
+.low-stock {
+    color: #d97706;
+}
+
+.out-of-stock {
+    color: #dc2626;
+}
+
+/* Seller dashboard styles */
+.stats-card {
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #10b981;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.stats-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Order status badges */
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 6px;
+}
+
+.status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-processing {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-shipped {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-delivered {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-cancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Alert styling */
+.alert {
+    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+}
+</style>
+
+<div class="container py-5">
+    <!-- Breadcrumb Navigation -->
+    {% block breadcrumb_items %}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'merchandise_list' %}">Merchandise</a></li>
+            {% block breadcrumb_items %}{% endblock %}
+        </ol>
+    </nav>
+    {% endblock %}
+    
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-light">{% block page_title %}{% endblock %}</h1>
+            <p class="lead text-muted-light">{% block page_subtitle %}{% endblock %}</p>
+        </div>
+    </div>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    {% block merchandise_content %}
+    {% endblock %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom styles for merchandise section */
+    .merchandise-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .merchandise-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .merchandise-img-container {
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+    }
+    
+    .merchandise-img {
+        max-height: 100%;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    
+    .merchandise-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    
+    .merchandise-card .card-footer {
+        background: transparent;
+        border-top: none;
+    }
+    
+    .price-tag {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+    
+    .stock-status {
+        font-size: 0.875rem;
+    }
+    
+    .in-stock {
+        color: #198754;
+    }
+    
+    .low-stock {
+        color: #fd7e14;
+    }
+    
+    .out-of-stock {
+        color: #dc3545;
+    }
+    
+    /* Seller dashboard styles */
+    .stats-card {
+        border-left: 4px solid #0d6efd;
+        transition: all 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Order status badges */
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .status-pending {
+        background-color: #ffc107;
+        color: #000;
+    }
+    
+    .status-processing {
+        background-color: #0dcaf0;
+        color: #000;
+    }
+    
+    .status-shipped {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+    
+    .status-delivered {
+        background-color: #198754;
+        color: #fff;
+    }
+    
+    .status-cancelled {
+        background-color: #dc3545;
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add any JavaScript specific to the merchandise section here
+</script>
+{% endblock %}

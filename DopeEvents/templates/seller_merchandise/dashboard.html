@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Merchandise Dashboard - TazamoEXP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">
+                        <i class="fas fa-store me-2"></i>Seller Menu
+                    </h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'seller_merchandise_dashboard' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a href="{% url 'seller_merchandise_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box me-2"></i>My Products
+                        </a>
+                        <a href="{% url 'seller_merchandise_add' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus me-2"></i>Add Product
+                        </a>
+                        <a href="{% url 'seller_merchandise_order_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-cart me-2"></i>Orders
+                        </a>
+                        <a href="{% url 'seller_merchandise_category_add' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tags me-2"></i>Categories
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar me-2"></i>Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">Total Products</h6>
+                                    <h3 class="mb-0">{{ total_products }}</h3>
+                                </div>
+                                <div class="text-primary">
+                                    <i class="fas fa-box fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">Active Products</h6>
+                                    <h3 class="mb-0 text-success">{{ active_products }}</h3>
+                                </div>
+                                <div class="text-success">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">Total Sales</h6>
+                                    <h3 class="mb-0 text-info">{{ total_sales }}</h3>
+                                </div>
+                                <div class="text-info">
+                                    <i class="fas fa-shopping-bag fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">Revenue</h6>
+                                    <h3 class="mb-0 text-warning">Ksh {{ total_revenue|floatformat:0 }}</h3>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="fas fa-money-bill-wave fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            {% if low_stock_items or out_of_stock_items %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Inventory Alerts
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            {% if low_stock_items %}
+                            <div class="alert alert-warning">
+                                <h6><i class="fas fa-box me-2"></i>Low Stock Items</h6>
+                                <ul class="mb-0">
+                                    {% for item in low_stock_items %}
+                                    <li>{{ item.name }} - {{ item.stock_quantity }} left</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            
+                            {% if out_of_stock_items %}
+                            <div class="alert alert-danger">
+                                <h6><i class="fas fa-times-circle me-2"></i>Out of Stock Items</h6>
+                                <ul class="mb-0">
+                                    {% for item in out_of_stock_items %}
+                                    <li>{{ item.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Recent Orders -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-receipt me-2"></i>Recent Orders
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            {% if orders %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order #</th>
+                                            <th>Customer</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>#{{ order.id }}</td>
+                                            <td>{{ order.buyer.get_full_name|default:order.buyer.username }}</td>
+                                            <td>Ksh {{ order.total_amount }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ order.status|yesno:'success,warning,info,danger,secondary' }}">
+                                                    {{ order.get_status_display }}
+                                                </span>
+                                            </td>
+                                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                            <td>
+                                                <a href="{% url 'seller_merchandise_order_detail' order.pk %}" 
+                                                   class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye me-1"></i>View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No orders yet</h5>
+                                <p class="text-muted">Your merchandise orders will appear here once customers start buying.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

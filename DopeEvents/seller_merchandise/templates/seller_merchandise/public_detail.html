@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ item.name }} - Merchandise{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'public_merchandise_list' %}">Shop</a></li>
+            <li class="breadcrumb-item active">{{ item.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 400px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 400px;">
+                        <i class="fas fa-box fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Title and Badges -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="card-title h2">{{ item.name }}</h1>
+                        <div>
+                            {% if item.is_featured %}
+                                <span class="badge bg-warning text-dark me-2">Featured</span>
+                            {% endif %}
+                            <span class="badge bg-success">{{ item.stock_quantity }} in stock</span>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <h3 class="text-primary">Ksh.{{ item.price }}</h3>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <h5>Description</h5>
+                        <p class="text-muted">{{ item.description|linebreaks }}</p>
+                    </div>
+
+                    <!-- Category -->
+                    {% if item.category %}
+                        <div class="mb-4">
+                            <h5>Category</h5>
+                            <span class="badge bg-secondary">{{ item.category.name }}</span>
+                        </div>
+                    {% endif %}
+
+                    <!-- Seller Info -->
+                    <div class="mb-4">
+                        <h5>Sold by</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                {% if item.seller.profile_picture %}
+                                    <img src="{{ item.seller.profile_picture.url }}" class="rounded-circle" alt="{{ item.seller.username }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h6 class="mb-0">{{ item.seller.business_name|default:item.seller.username }}</h6>
+                                <small class="text-muted">Verified Seller</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Button -->
+                    {% if user.is_authenticated and user.is_buyer %}
+                        {% if item.is_available %}
+                            <a href="{% url 'public_merchandise_order' item.pk %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-shopping-cart me-2"></i>Order Now
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-lg w-100" disabled>
+                                <i class="fas fa-times me-2"></i>Out of Stock
+                            </button>
+                        {% endif %}
+                    {% elif user.is_authenticated and user.is_seller %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            You are a seller. Only buyers can purchase merchandise.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please <a href="{% url 'login' %}?next={{ request.path }}">login as a buyer</a> to purchase this item.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Items -->
+    {% if related_items %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-4">More from {{ item.seller.business_name|default:item.seller.username }}</h3>
+                <div class="row">
+                    {% for related_item in related_items %}
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                {% if related_item.image %}
+                                    <img src="{{ related_item.image.url }}" class="card-img-top" alt="{{ related_item.name }}" style="height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                                        <i class="fas fa-box fa-2x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ related_item.name }}</h6>
+                                    <p class="card-text text-muted small">{{ related_item.description|truncatewords:10 }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="h6 text-primary mb-0">Ksh.{{ related_item.price }}</span>
+                                        <a href="{% url 'public_merchandise_detail' related_item.pk %}" class="btn btn-outline-primary btn-sm">
+                                            View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
