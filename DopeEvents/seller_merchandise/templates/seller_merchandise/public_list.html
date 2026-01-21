@@ -3,100 +3,465 @@
 
 {% block title %}Shop - Merchandise{% endblock %}
 
+{% block extra_css %}
+<style>
+/* Professional Minimalist Shop Styles */
+.shop-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    margin-top: 30px;
+}
+
+.shop-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.shop-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.shop-subtitle {
+    color: #6b7280;
+    font-size: 1.125rem;
+    margin-bottom: 0;
+}
+
+/* Search Section */
+.search-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-input-group {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: #9ca3af;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.search-input-field {
+    padding-left: 2.75rem !important;
+    height: 3rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background: #fafbfc;
+}
+
+.search-input-field:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #ffffff;
+}
+
+.search-input-field::placeholder {
+    color: #9ca3af;
+}
+
+.category-select-wrapper {
+    min-width: 200px;
+}
+
+.category-select-field {
+    height: 3rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    background: #fafbfc;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.category-select-field:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #ffffff;
+}
+
+.search-btn {
+    height: 3rem;
+    padding: 0 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background: #3b82f6;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.search-btn:active {
+    transform: translateY(0);
+}
+
+/* Results Info */
+.results-info {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.product-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.product-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    background: #f9fafb;
+}
+
+.product-image-placeholder {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    color: #9ca3af;
+    font-size: 3rem;
+}
+
+.product-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.75rem;
+}
+
+.product-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.featured-badge {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.product-description {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #059669;
+}
+
+.product-stock {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.seller-info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.view-btn {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+    background: #e5e7eb;
+    color: #111827;
+    text-decoration: none;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #d1d5db;
+    margin-bottom: 1.5rem;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.empty-text {
+    color: #9ca3af;
+    margin-bottom: 2rem;
+}
+
+.clear-filters-btn {
+    background: #f9fafb;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination .page-link {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    color: #374151;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+    background: #f9fafb;
+    color: #111827;
+    text-decoration: none;
+}
+
+.pagination .page-item.active .page-link {
+    background: #111827;
+    color: white;
+    border-color: #111827;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .search-input-group,
+    .category-select-wrapper {
+        min-width: 100%;
+    }
+    
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .shop-title {
+        font-size: 2rem;
+    }
+    
+    .search-section {
+        padding: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
+<div class="shop-container">
     <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-4 fw-bold">
-                <i class="fas fa-shopping-bag me-3"></i>Shop Merchandise
-            </h1>
-            <p class="lead text-muted">Discover amazing merchandise from our sellers</p>
-        </div>
+    <div class="shop-header">
+        <h1 class="shop-title">Shop Merchandise</h1>
+        <p class="shop-subtitle">Discover amazing products from our sellers</p>
     </div>
 
     <!-- Search and Filter -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <form method="GET" class="row g-3">
-                        <div class="col-md-6">
-                            <input type="text" name="q" class="form-control" placeholder="Search merchandise..." value="{{ request.GET.q }}">
-                        </div>
-                        <div class="col-md-3">
-                            <select name="category" class="form-select">
-                                <option value="">All Categories</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
-                                        {{ category.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search me-2"></i>Search
-                            </button>
-                        </div>
-                    </form>
+    <div class="search-section">
+        <form method="GET" class="search-form">
+            <div class="search-input-group">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="q" class="form-control search-input-field" placeholder="Search products..." value="{{ request.GET.q }}">
                 </div>
             </div>
-        </div>
+            <div class="category-select-wrapper">
+                <select name="category" class="form-select category-select-field">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary search-btn">
+                <i class="fas fa-search me-2"></i>Search
+            </button>
+        </form>
     </div>
-
     <!-- Results Count -->
     {% if request.GET.q or request.GET.category %}
-        <div class="row mb-3">
-            <div class="col-12">
-                <p class="text-muted">
-                    Found {{ merchandise_list|length }} items
-                    {% if request.GET.q %}for "{{ request.GET.q }}"{% endif %}
-                    {% if request.GET.category %}in selected category{% endif %}
-                </p>
-            </div>
+        <div class="results-info">
+            Found {{ merchandise_list|length }} items
+            {% if request.GET.q %}for "{{ request.GET.q }}"{% endif %}
+            {% if request.GET.category %}in selected category{% endif %}
+        </div>
+    {% else %}
+        <div class="results-info">
+            Showing {{ merchandise_list|length }} available items
         </div>
     {% endif %}
 
     <!-- Merchandise Grid -->
     {% if merchandise_list %}
-        <div class="row">
+        <div class="product-grid">
             {% for item in merchandise_list %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 event-card">
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
-                        {% else %}
-                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-                                <i class="fas fa-box fa-3x text-muted"></i>
-                            </div>
-                        {% endif %}
+                <div class="product-card">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" class="product-image" alt="{{ item.name }}">
+                    {% else %}
+                        <div class="product-image-placeholder">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="product-body">
+                        <div class="product-header">
+                            <h3 class="product-title">{{ item.name }}</h3>
+                            {% if item.is_featured %}
+                                <span class="featured-badge">Featured</span>
+                            {% endif %}
+                        </div>
                         
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title">{{ item.name }}</h5>
-                                {% if item.is_featured %}
-                                    <span class="badge bg-warning text-dark">Featured</span>
-                                {% endif %}
+                        <p class="product-description">{{ item.description|truncatewords:20 }}</p>
+                        
+                        <div class="product-footer">
+                            <div class="product-price">Ksh {{ item.price|floatformat:0 }}</div>
+                            <div class="product-stock">{{ item.stock_quantity }} in stock</div>
+                        </div>
+                        
+                        <div class="product-meta">
+                            <div class="seller-info">
+                                <i class="fas fa-store me-1"></i>{{ item.seller.business_name|default:item.seller.username }}
                             </div>
-                            
-                            <p class="card-text text-muted small">{{ item.description|truncatewords:20 }}</p>
-                            
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="h5 text-primary mb-0">Ksh.{{ item.price }}</span>
-                                    <span class="badge bg-success">{{ item.stock_quantity }} in stock</span>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="fas fa-store me-1"></i>{{ item.seller.business_name|default:item.seller.username }}
-                                    </small>
-                                    <a href="{% url 'public_merchandise_detail' item.pk %}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-eye me-1"></i>View Details
-                                    </a>
-                                </div>
-                            </div>
+                            <a href="{% url 'public_merchandise_detail' item.pk %}" class="view-btn">
+                                <i class="fas fa-eye me-1"></i>View Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -105,8 +470,8 @@
 
         <!-- Pagination -->
         {% if is_paginated %}
-            <nav aria-label="Merchandise pagination" class="mt-4">
-                <ul class="pagination justify-content-center">
+            <div class="pagination-container">
+                <ul class="pagination">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">First</a>
@@ -137,28 +502,26 @@
                         </li>
                     {% endif %}
                 </ul>
-            </nav>
+            </div>
         {% endif %}
     {% else %}
-        <div class="row">
-            <div class="col-12">
-                <div class="text-center py-5">
-                    <i class="fas fa-shopping-bag fa-4x text-muted mb-3"></i>
-                    <h3 class="text-muted">No merchandise found</h3>
-                    <p class="text-muted">
-                        {% if request.GET.q or request.GET.category %}
-                            Try adjusting your search or filters
-                        {% else %}
-                            No merchandise is available at the moment. Check back later!
-                        {% endif %}
-                    </p>
-                    {% if request.GET.q or request.GET.category %}
-                        <a href="{% url 'public_merchandise_list' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-times me-2"></i>Clear Filters
-                        </a>
-                    {% endif %}
-                </div>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-shopping-bag"></i>
             </div>
+            <h3 class="empty-title">No merchandise found</h3>
+            <p class="empty-text">
+                {% if request.GET.q or request.GET.category %}
+                    Try adjusting your search or filters
+                {% else %}
+                    No merchandise is available at the moment. Check back later!
+                {% endif %}
+            </p>
+            {% if request.GET.q or request.GET.category %}
+                <a href="{% url 'public_merchandise_list' %}" class="clear-filters-btn">
+                    <i class="fas fa-times me-2"></i>Clear Filters
+                </a>
+            {% endif %}
         </div>
     {% endif %}
 </div>
