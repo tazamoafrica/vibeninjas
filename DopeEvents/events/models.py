@@ -179,9 +179,10 @@ class TicketCategory(models.Model):
 
     @property
     def tickets_sold(self):
-        if self.initial_tickets is None or self.available_tickets is None:
-            return 0
-        return max(0, self.initial_tickets - self.available_tickets)
+        """Return total number of tickets sold based on actual ticket records"""
+        return self.tickets.filter(status='confirmed').aggregate(
+            total=models.Sum('quantity')
+        )['total'] or 0
 
     def get_sales_percentage(self):
         if not self.initial_tickets:
