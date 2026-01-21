@@ -1,7 +1,7 @@
 services:
   # Web Service
   - type: web
-    name: dopeevents-web
+    name: tazamoexp-web
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
