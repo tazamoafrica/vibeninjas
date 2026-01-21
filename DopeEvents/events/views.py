@@ -367,7 +367,7 @@ def payment_success(request):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
 
-
+@login_required
 def generate_ticket_image(ticket):
     """Generate a ticket image with event and buyer details"""
     # Create a new image with white background
@@ -640,6 +640,7 @@ def subscription_settings(request):
     return render(request, 'subscription/settings.html', context)
 
 @require_POST
+@login_required
 def create_payment_intent(request, pk):
     try:
         event = get_object_or_404(Event, pk=pk)
@@ -716,6 +717,7 @@ def signup_seller(request):
         form = SellerSignUpForm()
     return render(request, 'registration/seller-signup.html', {'form': form})
 
+@login_required
 # M-Pesa callback view
 @csrf_exempt
 def mpesa_callback(request):

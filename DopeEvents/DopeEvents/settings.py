@@ -171,3 +171,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configure Django for Heroku
 import django_heroku
 django_heroku.settings(locals())
+
+# Render Configuration
+import os
+
+# Check if running on Render
+if os.getenv('RENDER_SERVICE_ID', None):
+    # Render specific settings
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
+    
+    # Database configuration (Render provides DATABASE_URL)
+    if os.getenv('DATABASE_URL'):
+        import dj_database_url
+        DATABASES = {
+            'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+        }
+    
+    # Security settings for production
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    
+    # Session security
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
