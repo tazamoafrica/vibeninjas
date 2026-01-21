@@ -1,4 +1,4 @@
-# DopeEvents Django Project
+# TazamoEXP Django Project
 
 A clean, organized Django events management application.
 
