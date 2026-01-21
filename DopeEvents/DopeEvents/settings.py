@@ -59,7 +59,21 @@ WSGI_APPLICATION = 'DopeEvents.wsgi.application'
 CSRF_TRUSTED_ORIGINS = [f"http://{origin.strip()}" for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if origin.strip()]
 
 # Database Configuration
-if DEBUG:
+if os.getenv('RENDER_SERVICE_ID', None):
+    # Render database configuration
+    if os.getenv('DATABASE_URL'):
+        import dj_database_url
+        DATABASES = {
+            'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+        }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+else:
     # Development database
     DATABASES = {
         'default': {
@@ -67,32 +81,6 @@ if DEBUG:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-else:
-    # Production database (Supabase)
-    # Try to use DATABASE_URL first, then individual components
-    database_url = config('DATABASE_URL', default='')
-    if database_url:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': config('SUPABASE_DB_NAME'),
-                'USER': config('SUPABASE_DB_USER'),
-                'PASSWORD': config('SUPABASE_DB_PASSWORD'),
-                'HOST': config('SUPABASE_DB_HOST'),
-                'PORT': config('SUPABASE_DB_PORT', default='5432'),
-            }
-        }
-    else:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': config('SUPABASE_DB_NAME'),
-                'USER': config('SUPABASE_DB_USER'),
-                'PASSWORD': config('SUPABASE_DB_PASSWORD'),
-                'HOST': config('SUPABASE_DB_HOST'),
-                'PORT': config('SUPABASE_DB_PORT', default='5432'),
-            }
-        }
 
 # Cloudinary Configuration (only if credentials are provided)
 CLOUDINARY_CLOUD_NAME = config('CLOUDINARY_CLOUD_NAME', default='')
@@ -171,34 +159,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configure Django for Heroku
 import django_heroku
 django_heroku.settings(locals())
-
-# Render Configuration
-import os
-
-# Check if running on Render
-if os.getenv('RENDER_SERVICE_ID', None):
-    # Render specific settings
-    DEBUG = False
-    ALLOWED_HOSTS = ['*']
-    
-    # Database configuration (Render provides DATABASE_URL)
-    if os.getenv('DATABASE_URL'):
-        import dj_database_url
-        DATABASES = {
-            'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
-        }
-    
-    # Security settings for production
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'
-    
-    # Session security
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_SECURE = True
-    CSRF_COOKIE_HTTPONLY = True
