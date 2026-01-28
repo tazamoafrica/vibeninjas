@@ -67,4 +67,6 @@ urlpatterns = [
     path('shop/', seller_merchandise_views.PublicMerchandiseListView.as_view(), name='public_merchandise_list'),
     path('shop/<int:pk>/', seller_merchandise_views.PublicMerchandiseDetailView.as_view(), name='public_merchandise_detail'),
     path('shop/order/<int:item_id>/', login_required(seller_merchandise_views.create_seller_merchandise_order), name='public_merchandise_order'),
+    path('my-merchandise-orders/', views.buyer_merchandise_order_list, name='buyer_merchandise_order_list'),
+    path('my-merchandise-orders/<int:pk>/', views.buyer_merchandise_order_detail, name='buyer_merchandise_order_detail'),
 ]

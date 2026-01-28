@@ -857,3 +857,48 @@ def my_tickets(request):
         'past_tickets': past_tickets,
     }
     return render(request, 'profile/my_tickets.html', context)
+
+@login_required
+def buyer_merchandise_order_list(request):
+    """View all merchandise orders for the logged-in buyer"""
+    if not request.user.is_buyer:
+        messages.warning(request, 'This page is only available to buyers.')
+        return redirect('profile')
+    
+    # Get all merchandise orders for the current buyer, ordered by creation date (newest first)
+    from .models_merchandise import MerchandiseOrder, OrderItem
+    
+    orders = MerchandiseOrder.objects.filter(buyer=request.user)\
+        .prefetch_related('items__merchandise')\
+        .order_by('-created_at')
+    
+    # Calculate status counts
+    pending_orders_count = orders.filter(status='pending').count()
+    shipped_orders_count = orders.filter(status='shipped').count()
+    delivered_orders_count = orders.filter(status='delivered').count()
+    
+    context = {
+        'orders': orders,
+        'pending_orders_count': pending_orders_count,
+        'shipped_orders_count': shipped_orders_count,
+        'delivered_orders_count': delivered_orders_count,
+    }
+    return render(request, 'merchandise/buyer_order_list.html', context)
+
+@login_required
+def buyer_merchandise_order_detail(request, pk):
+    """View details of a specific merchandise order"""
+    if not request.user.is_buyer:
+        messages.warning(request, 'This page is only available to buyers.')
+        return redirect('profile')
+    
+    from .models_merchandise import MerchandiseOrder, OrderItem
+    
+    order = get_object_or_404(MerchandiseOrder, pk=pk, buyer=request.user)
+    order_items = order.orderitem_set.select_related('merchandise').all()
+    
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+    return render(request, 'merchandise/buyer_order_detail.html', context)
