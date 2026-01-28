@@ -56,16 +56,50 @@
         .kenya-glitter {
             background: linear-gradient(
                 300deg,
-                #000000 0%,   /* Black */
-                #ff0000 15%,  /* Red */
-                #ffffff 30%, /* White */
-                rgb(190, 211, 190) 45%  /* Green */
+                #008000 0%,    /* Kenya - Green */
+                #FF0000 12%,   /* Kenya - Red */
+                #FFFFFF 24%,   /* Kenya - White */
+                #000000 36%,   /* Kenya - Black */
+                #FF0000 48%,   /* South Africa - Red */
+                #0000FF 60%,   /* South Africa - Blue */
+                #FFB90F 72%,   /* Ghana - Gold */
+                #008000 84%,   /* Ghana - Green */
+                #FFFFFF 96%    /* Nigeria - White */
             );
-            background-size: 140% auto;
+            background-size: 300% auto;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: kenyanGlitter 5s ease infinite;
+            animation: kenyanGlitter 6s ease infinite;
+            font-weight: 900;
+            position: relative;
+        }
+
+        .kenya-glitter::after {
+            content: 'VibeNinjas';
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(
+                300deg,
+                #008000 0%,    /* Kenya - Green */
+                #FF0000 12%,   /* Kenya - Red */
+                #FFFFFF 24%,   /* Kenya - White */
+                #000000 36%,   /* Kenya - Black */
+                #FF0000 48%,   /* South Africa - Red */
+                #0000FF 60%,   /* South Africa - Blue */
+                #FFB90F 72%,   /* Ghana - Gold */
+                #008000 84%,   /* Ghana - Green */
+                #FFFFFF 96%    /* Nigeria - White */
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: kenyanGlitter 6s ease infinite reverse;
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(1px);
         }
 
         .navbar {
@@ -73,23 +107,47 @@
             width: 100%;
             top: 0;
             z-index: 1030;
-            background-color: rgba(8, 1, 1, 0.99);
         }
 
         .navbar-brand {
-            font-weight: bold;
-            font-size: 1.2rem;
+            font-weight: 900;
+            font-size: 1.3rem;
             margin-right: auto;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.02);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
         }
 
         .navbar-brand .fas {
-            color: rgb(31, 25, 26);
-            text-shadow: 0 0 5px rgba(255,255,255,0.5);
-            animation: iconGlitter 2s ease-in-out infinite,
-                       spinGlitter 4s ease-in-out 2s infinite;
+            font-size: 1.1rem;
+            margin-right: 0.4rem;
+            background: linear-gradient(
+                300deg,
+                #008000 0%,    /* Kenya - Green */
+                #FF0000 12%,   /* Kenya - Red */
+                #FFFFFF 24%,   /* Kenya - White */
+                #000000 36%,   /* Kenya - Black */
+                #FF0000 48%,   /* South Africa - Red */
+                #0000FF 60%,   /* South Africa - Blue */
+                #FFB90F 72%,   /* Ghana - Gold */
+                #008000 84%,   /* Ghana - Green */
+                #FFFFFF 96%    /* Nigeria - White */
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: kenyanGlitter 6s ease infinite;
             display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
         }
 
         @keyframes spinGlitter {
@@ -212,6 +270,55 @@
         .offcanvas-title {
             font-size: 1.25rem;
             margin: 0;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .offcanvas-title .fas {
+            font-size: 1.1rem;
+            margin-right: 0.4rem;
+            background: linear-gradient(
+                300deg,
+                #008000 0%,    /* Kenya - Green */
+                #FF0000 12%,   /* Kenya - Red */
+                #FFFFFF 24%,   /* Kenya - White */
+                #000000 36%,   /* Kenya - Black */
+                #FF0000 48%,   /* South Africa - Red */
+                #0000FF 60%,   /* South Africa - Blue */
+                #FFB90F 72%,   /* Ghana - Gold */
+                #008000 84%,   /* Ghana - Green */
+                #FFFFFF 96%    /* Nigeria - White */
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: kenyanGlitter 6s ease infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
+        }
+
+        .offcanvas-title .brand-text {
+            background: linear-gradient(
+                300deg,
+                #008000 0%,    /* Kenya - Green */
+                #FF0000 12%,   /* Kenya - Red */
+                #FFFFFF 24%,   /* Kenya - White */
+                #000000 36%,   /* Kenya - Black */
+                #FF0000 48%,   /* South Africa - Red */
+                #0000FF 60%,   /* South Africa - Blue */
+                #FFB90F 72%,   /* Ghana - Gold */
+                #008000 84%,   /* Ghana - Green */
+                #FFFFFF 96%    /* Nigeria - White */
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: kenyanGlitter 6s ease infinite;
+            font-weight: 900;
+            position: relative;
         }
 
         .btn-close-white {
@@ -220,15 +327,21 @@
 
         .offcanvas-nav .nav-link {
             padding: 0.8rem 1rem;
-            color: #212529;
+            color: #000000 !important;
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             margin-bottom: 0.25rem;
+            font-weight: 500;
         }
 
         .offcanvas-nav .nav-link:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+            background-color: rgba(0, 0, 0, 0.1);
             transform: translateX(5px);
+            color: #000000 !important;
+        }
+
+        .offcanvas-nav .nav-link .fas {
+            color: #000000 !important;
         }
 
         /* Version Info */
@@ -475,7 +588,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">
-                <i class="fas fa-ticket-alt me-2"></i>TazamoEXP
+                <i class="fas fa-ticket-alt me-2"></i><span class="brand-text">VibeNinjas</span>
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
