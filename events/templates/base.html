@@ -24,13 +24,12 @@
     <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
     
     <style>
-         :root {
+        :root {
             --primary-color: rgb(202, 129, 20);
             --primary-gradient: linear-gradient(135deg, rgb(231, 148, 23) 0%, rgb(231, 165, 22) 100%);
             --hover-gradient: linear-gradient(45deg, rgb(230, 156, 21), #FF8C42);
         }
 
-       
         body {
             min-height: 100vh;
             display: flex;
@@ -39,81 +38,80 @@
 
         main {
             flex: 1;
+            margin-top: 85px;
         }
 
-@keyframes kenyanGlitter {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
+        @keyframes kenyanGlitter {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-.kenya-glitter {
-    background: linear-gradient(
-        300deg,
-        #000000 0%,   /* Black */
-        #ff0000 15%,  /* Red */
-        #ffffff 30%, /* White */
-rgb(190, 211, 190) 45%  /* Green */
-    );
-    background-size: 140% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: kenyanGlitter 5s ease infinite;
-}
+        .kenya-glitter {
+            background: linear-gradient(
+                300deg,
+                #000000 0%,   /* Black */
+                #ff0000 15%,  /* Red */
+                #ffffff 30%, /* White */
+                rgb(190, 211, 190) 45%  /* Green */
+            );
+            background-size: 140% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: kenyanGlitter 5s ease infinite;
+        }
 
-.navbar {
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1030;
-        background-color: rgba(8, 1, 1, 0.99); 
-    }
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1030;
+            background-color: rgba(8, 1, 1, 0.99);
+        }
 
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-right: auto;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-/* Add this to your existing <style> section */
-@keyframes spinGlitter {
-    0% {
-        transform: rotate(0deg) scale(1);
-    }
-    50% {
-        transform: rotate(180deg) scale(1.2);
-    }
-    100% {
-        transform: rotate(360deg) scale(1);
-    }
-}
+        .navbar-brand .fas {
+            color: rgb(31, 25, 26);
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            animation: iconGlitter 2s ease-in-out infinite,
+                       spinGlitter 4s ease-in-out 2s infinite;
+            display: inline-block;
+        }
 
-.navbar-brand .fas {
-    color: rgb(31, 25, 26);
-    text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    animation: iconGlitter 2s ease-in-out infinite,
-               spinGlitter 4s ease-in-out 2s infinite;
-    display: inline-block;
-}
+        @keyframes spinGlitter {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
 
-
-@keyframes iconGlitter {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.8;
-    }
-}
+        @keyframes iconGlitter {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
 
         .navbar-dark {
             background: var(--primary-gradient) !important;
