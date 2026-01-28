@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'events',
     'payments',
     'analytics',
-    'seller_merchandise.apps.SellerMerchandiseConfig',
+    'seller_merchandise',
 ]
 
 MIDDLEWARE = [
@@ -33,7 +33,7 @@ MIDDLEWARE = [
     'analytics.middleware.VisitorTrackingMiddleware',
 ]
 
-ROOT_URLCONF = 'vibeninjas.urls'
+ROOT_URLCONF = 'DopeEvents.DopeEvents.urls'
 
 TEMPLATES = [
     {
@@ -52,7 +52,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'vibeninjas.wsgi.application'
+WSGI_APPLICATION = 'DopeEvents.DopeEvents.wsgi.application'
 
 CSRF_TRUSTED_ORIGINS = [f"http://{origin.strip()}" for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if origin.strip()]
 
