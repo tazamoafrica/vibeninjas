@@ -357,6 +357,37 @@ def seller_merchandise_order_list(request):
     orders = SellerMerchandiseOrder.objects.filter(seller=request.user).order_by('-created_at')
     return render(request, 'seller_merchandise/order_list.html', {'orders': orders})
 
+@login_required
+def update_order_status(request, pk):
+    """Update order status for seller"""
+    order = get_object_or_404(SellerMerchandiseOrder, pk=pk, seller=request.user)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        
+        # Define status flow
+        valid_transitions = {
+            'pending': ['processing', 'cancelled'],
+            'processing': ['shipped', 'cancelled'],
+            'shipped': ['in_transit', 'cancelled'],
+            'in_transit': ['delivered'],
+            'delivered': [],  # Final status
+            'cancelled': []   # Final status
+        }
+        
+        if new_status in valid_transitions.get(order.status, []):
+            old_status = order.get_status_display()
+            order.status = new_status
+            order.save()
+            
+            messages.success(request, f'Order #{order.id} status updated from {old_status} to {order.get_status_display()}')
+        else:
+            messages.error(request, f'Invalid status transition from {order.get_status_display()} to {order.get_status_display(new_status)}')
+        
+        return redirect('seller_merchandise_order_list')
+    
+    return redirect('seller_merchandise_order_detail', pk=pk)
+
 # Category Management
 class SellerMerchandiseCategoryCreateView(LoginRequiredMixin, CreateView):
     """Create view for merchandise categories"""

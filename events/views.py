@@ -869,7 +869,7 @@ def buyer_merchandise_order_list(request):
     from seller_merchandise.models import SellerMerchandiseOrder
     
     orders = SellerMerchandiseOrder.objects.filter(buyer=request.user)\
-        .prefetch_related('items__merchandise')\
+        .prefetch_related('sellerorderitem_set__merchandise')\
         .order_by('-created_at')
     
     # Calculate status counts

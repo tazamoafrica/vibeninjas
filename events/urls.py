@@ -62,6 +62,7 @@ urlpatterns = [
     path('seller/merchandise/order/<int:item_id>/', login_required(seller_merchandise_views.create_seller_merchandise_order), name='seller_merchandise_order'),
     path('seller/merchandise/orders/', login_required(seller_merchandise_views.seller_merchandise_order_list), name='seller_merchandise_order_list'),
     path('seller/merchandise/orders/<int:pk>/', login_required(seller_merchandise_views.seller_merchandise_order_detail), name='seller_merchandise_order_detail'),
+    path('seller/merchandise/orders/<int:pk>/update-status/', login_required(seller_merchandise_views.update_order_status), name='update_order_status'),
     path('seller/merchandise/category/add/', login_required(seller_merchandise_views.SellerMerchandiseCategoryCreateView.as_view()), name='seller_merchandise_category_add'),
     
     # Public Merchandise (for buyers)

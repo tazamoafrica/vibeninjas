@@ -107,10 +107,100 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="{% url 'seller_merchandise_order_detail' order.pk %}" 
-                                           class="btn btn-sm btn-primary">
-                                            <i class="fas fa-eye me-1"></i>View
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'seller_merchandise_order_detail' order.pk %}" 
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                            
+                                            {% if order.status == 'pending' %}
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="fas fa-cog me-1"></i>Update
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="processing">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fas fa-cog text-info me-2"></i>Mark as Processing
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="cancelled">
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="fas fa-times-circle me-2"></i>Cancel Order
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {% elif order.status == 'processing' %}
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="fas fa-cog me-1"></i>Update
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="shipped">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fas fa-truck text-primary me-2"></i>Mark as Shipped
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="cancelled">
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="fas fa-times-circle me-2"></i>Cancel Order
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {% elif order.status == 'shipped' %}
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="fas fa-cog me-1"></i>Update
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="in_transit">
+                                                            <button type="submit" class="dropdown-item">
+                                                                <i class="fas fa-truck text-warning me-2"></i>Mark as In Transit
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="status" value="cancelled">
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="fas fa-times-circle me-2"></i>Cancel Order
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {% elif order.status == 'in_transit' %}
+                                            <form method="post" action="{% url 'update_order_status' order.pk %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="status" value="delivered">
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-check-circle me-1"></i>Mark Delivered
+                                                </button>
+                                            </form>
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}

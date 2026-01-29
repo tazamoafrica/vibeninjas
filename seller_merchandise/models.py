@@ -65,6 +65,7 @@ class SellerMerchandiseOrder(models.Model):
         ('pending', 'Pending'),
         ('processing', 'Processing'),
         ('shipped', 'Shipped'),
+        ('in_transit', 'In Transit'),
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     ]
