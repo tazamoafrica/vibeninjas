@@ -866,9 +866,9 @@ def buyer_merchandise_order_list(request):
         return redirect('profile')
     
     # Get all merchandise orders for the current buyer, ordered by creation date (newest first)
-    from .models_merchandise import MerchandiseOrder, OrderItem
+    from seller_merchandise.models import SellerMerchandiseOrder
     
-    orders = MerchandiseOrder.objects.filter(buyer=request.user)\
+    orders = SellerMerchandiseOrder.objects.filter(buyer=request.user)\
         .prefetch_related('items__merchandise')\
         .order_by('-created_at')
     
@@ -892,10 +892,10 @@ def buyer_merchandise_order_detail(request, pk):
         messages.warning(request, 'This page is only available to buyers.')
         return redirect('profile')
     
-    from .models_merchandise import MerchandiseOrder, OrderItem
+    from seller_merchandise.models import SellerMerchandiseOrder
     
-    order = get_object_or_404(MerchandiseOrder, pk=pk, buyer=request.user)
-    order_items = order.orderitem_set.select_related('merchandise').all()
+    order = get_object_or_404(SellerMerchandiseOrder, pk=pk, buyer=request.user)
+    order_items = order.sellerorderitem_set.select_related('merchandise').all()
     
     context = {
         'order': order,

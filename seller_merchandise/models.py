@@ -38,7 +38,7 @@ class SellerMerchandise(models.Model):
     stock_quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(SellerMerchandiseCategory, on_delete=models.SET_NULL, null=True, blank=True)
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='seller_merchandise')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     image = models.ImageField(upload_to='seller_merchandise/images/', blank=True, null=True)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
