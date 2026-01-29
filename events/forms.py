@@ -41,15 +41,38 @@ class EventForm(forms.ModelForm):
         empty_label="Select Category",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    new_category = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Or create new category...',
+            'id': 'new_category_field'
+        })
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk and self.instance.date:
             self.fields['date'].widget.attrs['value'] = self.instance.date.strftime('%Y-%m-%dT%H:%M')
 
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get('category')
+        new_category = cleaned_data.get('new_category')
+        
+        if not category and new_category:
+            # Create new category
+            category = Category.objects.create(name=new_category.strip())
+            cleaned_data['category'] = category
+        elif not category and not new_category:
+            raise forms.ValidationError('Please select a category or create a new one.')
+        
+        return cleaned_data
+
     class Meta:
         model = Event
-        fields = ['title', 'description', 'category', 'image', 'date', 'location', 'total_tickets']
+        fields = ['title', 'description', 'category', 'new_category', 'image', 'date', 'location', 'total_tickets']
         widgets = {
             'date': forms.DateTimeInput(attrs={
                 'type': 'datetime-local',
@@ -61,10 +84,6 @@ class EventForm(forms.ModelForm):
             'total_tickets': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
-
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
 
 class TicketPurchaseForm(forms.Form):
     buyer_name = forms.CharField(

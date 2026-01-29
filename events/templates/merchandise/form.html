@@ -20,6 +20,19 @@
     <div class="col-lg-8">
         <div class="card shadow-sm">
             <div class="card-body">
+                <!-- Activate Draft Products Button -->
+                {% if user.is_seller or user.is_staff %}
+                <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                    <div class="flex-grow-1">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Have draft products?</strong> Activate them to make them visible to buyers.
+                    </div>
+                    <a href="{% url 'seller_activate_merchandise' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-power-off me-1"></i> Activate My Draft Products
+                    </a>
+                </div>
+                {% endif %}
+                
                 <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                     {% csrf_token %}
                     
@@ -64,6 +77,15 @@
                                         {{ form.category.errors.0 }}
                                     </div>
                                     {% endif %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">Or create a new category:</small>
+                                        {{ form.new_category }}
+                                        {% if form.new_category.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.new_category.errors.0 }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="{{ form.price.id_for_label }}" class="form-label">
@@ -78,6 +100,40 @@
                                         {{ form.price.errors.0 }}
                                     </div>
                                     {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.stock_quantity.id_for_label }}" class="form-label">
+                                        Stock Quantity <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.stock_quantity }}
+                                    {% if form.stock_quantity.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.stock_quantity.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-text">Number of items available for sale.</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.status.id_for_label }}" class="form-label">
+                                        <i class="fas fa-toggle-on me-1"></i>Product Status <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.status }}
+                                    {% if form.status.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.status.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-text bg-light p-2 rounded">
+                                        <i class="fas fa-info-circle text-primary me-1"></i>
+                                        <strong>Status Options:</strong><br>
+                                        <span class="badge bg-success me-1">Active</span> Visible to buyers and available for purchase<br>
+                                        <span class="badge bg-secondary me-1">Draft</span> Hidden from buyers (work in progress)<br>
+                                        <span class="badge bg-warning me-1">Inactive</span> Temporarily unavailable<br>
+                                        <span class="badge bg-danger me-1">Sold Out</span> No stock available (automatically set)
+                                    </div>
                                 </div>
                             </div>
                             
@@ -273,6 +329,34 @@ document.addEventListener('DOMContentLoaded', function() {
             form.classList.add('was-validated');
         }, false);
     });
+    
+    // Category creation functionality
+    const categorySelect = document.querySelector('select[name="category"]');
+    const newCategoryInput = document.querySelector('input[name="new_category"]');
+    
+    if (categorySelect && newCategoryInput) {
+        // Show/hide new category field based on selection
+        categorySelect.addEventListener('change', function() {
+            if (this.value) {
+                newCategoryInput.value = '';
+                newCategoryInput.style.display = 'none';
+            } else {
+                newCategoryInput.style.display = 'block';
+            }
+        });
+        
+        // Hide category select when typing in new category
+        newCategoryInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                categorySelect.value = '';
+            }
+        });
+        
+        // Initially hide new category field if a category is selected
+        if (categorySelect.value) {
+            newCategoryInput.style.display = 'none';
+        }
+    }
     
     // Preview image before upload
     const imageInput = document.getElementById('{{ form.image.id_for_label }}');

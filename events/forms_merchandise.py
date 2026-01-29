@@ -3,9 +3,29 @@ from .models import Merchandise, MerchandiseCategory, MerchandiseOrder
 from django.forms import ModelForm, Textarea, NumberInput, Select, FileInput, TextInput
 
 class MerchandiseForm(forms.ModelForm):
+    category = forms.ModelChoiceField(
+        queryset=MerchandiseCategory.objects.all(),
+        empty_label="Select Category",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    new_category = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Or create new category...',
+            'id': 'new_merchandise_category_field'
+        })
+    )
+    status = forms.ChoiceField(
+        choices=Merchandise.STATUS_CHOICES,
+        initial='draft',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
     class Meta:
         model = Merchandise
-        fields = ['name', 'description', 'price', 'stock_quantity', 'category', 'image']
+        fields = ['name', 'description', 'price', 'stock_quantity', 'category', 'new_category', 'status', 'image']
         widgets = {
             'name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter product name'}),
             'description': Textarea(attrs={
@@ -24,13 +44,26 @@ class MerchandiseForm(forms.ModelForm):
                 'min': '0',
                 'placeholder': '0',
             }),
-            'category': Select(attrs={'class': 'form-select'}),
             'image': FileInput(attrs={'class': 'form-control'}),
         }
         help_texts = {
             'image': 'Upload a high-quality image of your product (max 5MB)',
             'price': 'Price in Kenyan Shillings (KSh)',
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get('category')
+        new_category = cleaned_data.get('new_category')
+        
+        if not category and new_category:
+            # Create new category
+            category = MerchandiseCategory.objects.create(name=new_category.strip())
+            cleaned_data['category'] = category
+        elif not category and not new_category:
+            raise forms.ValidationError('Please select a category or create a new one.')
+        
+        return cleaned_data
 
     def clean_price(self):
         price = self.cleaned_data.get('price')

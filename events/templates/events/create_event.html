@@ -304,6 +304,11 @@
                                 <label for="{{ form.category.id_for_label }}" class="form-label">Event Category</label>
                                 {{ form.category|addclass:"form-select" }}
                                 <div class="invalid-feedback">{{ form.category.errors }}</div>
+                                <div class="mt-2">
+                                    <small class="text-muted">Or create a new category:</small>
+                                    {{ form.new_category|addclass:"form-control mt-1" }}
+                                    <div class="invalid-feedback">{{ form.new_category.errors }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -508,6 +513,34 @@
             });
         }
         initDateTimePickers();
+
+        // Category creation functionality
+        const categorySelect = document.querySelector('select[name="category"]');
+        const newCategoryInput = document.querySelector('input[name="new_category"]');
+        
+        if (categorySelect && newCategoryInput) {
+            // Show/hide new category field based on selection
+            categorySelect.addEventListener('change', function() {
+                if (this.value) {
+                    newCategoryInput.value = '';
+                    newCategoryInput.style.display = 'none';
+                } else {
+                    newCategoryInput.style.display = 'block';
+                }
+            });
+            
+            // Hide category select when typing in new category
+            newCategoryInput.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    categorySelect.value = '';
+                }
+            });
+            
+            // Initially hide new category field if a category is selected
+            if (categorySelect.value) {
+                newCategoryInput.style.display = 'none';
+            }
+        }
 
         // Image preview functionality
         const imageInput = document.querySelector('input[type="file"]');

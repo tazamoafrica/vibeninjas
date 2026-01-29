@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 
 # Import seller merchandise views
 from seller_merchandise import views as seller_merchandise_views
+from . import views_merchandise
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -69,4 +70,8 @@ urlpatterns = [
     path('shop/order/<int:item_id>/', login_required(seller_merchandise_views.create_seller_merchandise_order), name='public_merchandise_order'),
     path('my-merchandise-orders/', views.buyer_merchandise_order_list, name='buyer_merchandise_order_list'),
     path('my-merchandise-orders/<int:pk>/', views.buyer_merchandise_order_detail, name='buyer_merchandise_order_detail'),
+    
+    # Admin functions
+    path('admin/activate-merchandise/', views_merchandise.activate_draft_merchandise, name='activate_draft_merchandise'),
+    path('seller/activate-merchandise/', views_merchandise.activate_draft_merchandise, name='seller_activate_merchandise'),
 ]

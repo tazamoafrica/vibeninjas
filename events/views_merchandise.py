@@ -7,8 +7,35 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
 from django.db.models import Q, Sum
 from django.utils import timezone
+from django.http import JsonResponse
 from .models import Merchandise, MerchandiseCategory, MerchandiseOrder, OrderItem
 from .forms_merchandise import MerchandiseForm, MerchandiseOrderForm
+
+# Admin function to activate all draft products
+@login_required
+def activate_draft_merchandise(request):
+    """Function to activate draft merchandise products"""
+    if request.user.is_staff:
+        # Admin can activate all draft products
+        draft_products = Merchandise.objects.filter(status='draft')
+        updated_count = draft_products.update(status='active')
+        messages.success(request, f'Successfully activated {updated_count} draft products!')
+    elif request.user.is_seller:
+        # Sellers can only activate their own draft products
+        draft_products = Merchandise.objects.filter(status='draft', seller=request.user)
+        updated_count = draft_products.update(status='active')
+        messages.success(request, f'Successfully activated {updated_count} of your draft products!')
+    else:
+        messages.error(request, 'Access denied. Admin or seller privileges required.')
+        return redirect('merchandise_list')
+    
+    # Get updated stats
+    active_count = Merchandise.objects.filter(status='active').count()
+    active_with_stock = Merchandise.objects.filter(status='active', stock_quantity__gt=0).count()
+    
+    messages.info(request, f'Total active products: {active_count}, Available for sale: {active_with_stock}')
+    
+    return redirect('merchandise_list')
 
 # Merchandise Views
 class MerchandiseListView(ListView):
@@ -71,7 +98,21 @@ class MerchandiseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
     def form_valid(self, form):
         form.instance.seller = self.request.user
         form.instance.seller_type = 'seller' if self.request.user.is_seller else 'admin'
-        messages.success(self.request, 'Your merchandise has been listed successfully!')
+        
+        # Auto-set status based on stock quantity
+        stock_quantity = form.cleaned_data.get('stock_quantity', 0)
+        status = form.cleaned_data.get('status', 'draft')
+        
+        # If status is not explicitly set, auto-determine based on stock
+        if not form.data.get('status'):  # If user didn't choose a status
+            if stock_quantity > 0:
+                form.instance.status = 'active'
+            else:
+                form.instance.status = 'draft'
+        else:
+            form.instance.status = status
+            
+        messages.success(self.request, f'Your merchandise has been listed successfully with status: {form.instance.get_status_display()}!')
         return super().form_valid(form)
     
     def test_func(self):
